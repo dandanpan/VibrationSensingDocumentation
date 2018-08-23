@@ -1,0 +1,1 @@
+@reboot sh /home/pi/Footstep/config/scripts/pyanchor-read/launcher.sh > /home/pi/Footstep/config/logs/cronlog 2>&1
