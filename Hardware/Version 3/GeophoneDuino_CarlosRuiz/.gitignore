@@ -1,0 +1,5 @@
+.DS_Store
+.idea/*
+Experiment data/*
+*.pyc
+*.gcode

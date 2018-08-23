@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+
+<script src="workerBlobToArr.js"></script>
+<script src="helperFuncs.js"></script>
+<!-- Plotly.js and jQuery -->
+<script>addLibScripts([['https://cdn.plot.ly/plotly-latest.min.js', 'lib/plotly.min.js'], ['https://code.jquery.com/jquery-3.3.1.min.js', 'lib/jquery.min.js']]);</script>
+
+<script>
+	var GRAPH_ID = "geophone-graph";
+	var F_SAMP = 10000, X_RANGE_IN_SEC = 5;
+	var Y_MIN = 0, Y_MAX = 4095;
+	var arrData = {x_millis: [], x: [], y: []};
+	var ws, workerUpdatePlot;
+
+	function createWebSocket(connectTo) {
+		ws = new WebSocket(connectTo);
+		ws.hasReceivedAnyMessagesYet = false;
+
+		ws.onopen = function() {
+			// WebSocket is connected
+			console.log("Successfully connected to " + ws.url);
+		};
+
+		ws.onmessage = function(evt) {
+			if (!ws.hasReceivedAnyMessagesYet) {	// First message contains GeophoneID, use it as title and exit (no data yet)
+				ws.hasReceivedAnyMessagesYet = true;
+				Plotly.relayout(GRAPH_ID, { title: evt.data });
+				
+				workerUpdatePlot = createNewWorker();	// After the first message is received, create a worker thread to periodically update the Plotly graph
+				workerUpdatePlot.onmessage = function(e) {
+					var updateGraph = function() {
+						dataUpdateGraph();
+						setTimeout(updateGraph, 50);
+					};
+					updateGraph();
+				};
+				workerUpdatePlot.postMessage({cmd: 'plot', scriptPath: getWorkerScriptPath()});	// Start the replotting trigger
+				return;
+			}
+
+			var workerThread = createNewWorker();
+			
+			workerThread.onmessage = function(e) {
+				var lastT = (arrData.x.length>0)? arrData.x[arrData.x.length-1] : -1/F_SAMP;	// Get the time of the last data point
+				
+				arrData.x_millis.push(Date.now());	// Save the new results
+				arrData.x.pushArray(Array.from(Array(e.data.binData.length), (e,i) => lastT + (i+1)/F_SAMP));
+				arrData.y.pushArray(e.data.binData);
+				
+				workerThread.terminate();	// Terminate the thread
+			};
+			
+			// Pass a message to process the packet in the worker thread we just created
+			workerThread.postMessage({cmd: 'parse', blob: evt.data, toType: 'uint16_t', scriptPath: getWorkerScriptPath()});
+		};
+
+		ws.onclose = function() {
+		  // WebSocket is closed.
+			if (workerUpdatePlot) workerUpdatePlot.terminate();
+			workerUpdatePlot = null;
+
+			console.log("WebSocket closed!");
+		};
+
+		ws.onerror = function(err) {
+			console.log("Error in webSocket!");
+		};
+
+		return ws;
+	}
+
+	function wsClose() {
+		if (ws) ws.close();
+		ws = null;
+	}
+
+	function wsReconnect() {
+		wsClose();
+		ws = createWebSocket("ws://" + $('#wsHost')[0].value + ":" + $('#wsPort')[0].value + "/geophone");
+	}
+
+	function dataUpdateGraph(forceUpdate=false, plotOnlyRecent=true) {
+		if (!forceUpdate && (!ws || ws.readyState !== ws.OPEN)) return;	// Only update graph if socket is open (meaning we have something to update). Otherwise, user can't scroll/pan through data after closing the socket!
+		var LEN_VISIBLE = X_RANGE_IN_SEC*F_SAMP;	// Store how many data points should be visible at the current zoom level
+		var len = arrData.y.length;
+		var startSlice = Math.max(0, plotOnlyRecent*(len-LEN_VISIBLE));	// If plotOnlyRecent is false, startSlice will be 0 (whole array); otherwise, slice only the last LEN_VISIBLE points
+		//var nowInSecs = arrData.x[len-1];
+
+		Plotly.update(GRAPH_ID, {
+			x: [arrData.x.slice(startSlice)],
+			y: [arrData.y.slice(startSlice)]	// Only plot the last 100k points for faster performance
+		}, {
+			//'xaxis.range': [nowInSecs-X_RANGE_IN_SEC, nowInSecs]
+			//'xaxis.range': [len-X_RANGE_IN_SEC*F_SAMP, len]
+		});
+	}
+
+	function dataDownload() {
+		if (arrData.y.length <= 0) return;	// Nothing to download
+		var title = $("#" + GRAPH_ID)[0].layout.title;
+		var d = new Date(arrData.x_millis[0]);	// Date at which the data collection started
+		function twoDigit(n) { return ('0' + n).slice(-2); }	// Helper function to convert 1-digit numbers to 2-digit strings (eg: 2->'02')
+		var strDate = [d.getFullYear(), d.toLocaleString('en-US', {month: 'short'}), twoDigit(d.getDate())].join('-');
+		var strTime = [twoDigit(d.getHours()), twoDigit(d.getMinutes()), twoDigit(d.getSeconds())].join('-');
+        var filename = [title, strDate, strTime].join('_') + '.csv';
+
+		var url = URL.createObjectURL(new Blob([arrData.y.join('\n')], {type: 'text/csv; charset=utf-8;'}));
+        var link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.click();	// Start the download
+	}
+
+	function dataClear() {
+		arrData.x_millis = [];
+		arrData.x = [];
+		arrData.y = [];
+		Plotly.restyle(GRAPH_ID, {
+			//x: [arrData.x],
+			y: [arrData.y]
+		});
+	}
+
+	function updateYlims() {
+		Plotly.relayout(GRAPH_ID, {
+			'yaxis.range': [Y_MIN, Y_MAX]
+		});
+	}
+
+	// Helper function that allows pushing an array to an existing array
+	Array.prototype.pushArray = function(arr) {
+		this.push.apply(this, arr);
+	};
+
+	function jQueryAssignDocumentReady() {
+		$(document).ready(function() {
+			Plotly.plot(GRAPH_ID, [{
+				y: [],
+				mode: 'lines',
+				'line.color': '#80CAF6'
+			}], {
+				yaxis: {
+					autorange: false,
+					range: [Y_MIN, Y_MAX]
+				}
+			}, {
+				modeBarButtonsToRemove: ['sendDataToCloud'],
+				displaylogo: false
+			});
+			//setInterval(dataUpdateGraph, 50);  // 20Hz refresh rate
+
+			// Handle zoom controls (and update vars with current value)
+			Y_MAX = $("#zoomYmax").val();
+			Y_MIN = $("#zoomYmin").val();
+			X_RANGE_IN_SEC = $("#zoomX").val();
+			$("#zoomYmax").on('change keydown paste input', function() { Y_MAX = Math.max(parseInt($("#zoomYmax").val()), Y_MIN+1); updateYlims(); });
+			$("#zoomYmin").on('change keydown paste input', function() { Y_MIN = Math.min(parseInt($("#zoomYmin").val()), Y_MAX-1); updateYlims(); });
+			$("#zoomX").on('change keydown paste input', function() { X_RANGE_IN_SEC = parseFloat($("#zoomX").val()); dataUpdateGraph(true); });
+
+			var DEFAULT_HOST = "192.168.43.100"; // window.location.hostname;
+			var DEFAULT_PORT = 81;
+			$('#wsHost')[0].value = (window.location.hostname !== '')? window.location.hostname : DEFAULT_HOST;
+			$('#wsPort')[0].value = DEFAULT_PORT;
+			wsReconnect();
+		});
+	}
+</script>
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Real-time geophone signal</title>
+    <meta name="author" content="PEI Lab">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+	<p><input type="text" id="wsHost" style="width: 200px;">:<input type="number" id="wsPort" min="1" max="65535" style="width: 50px;"><input type="button" value="(Re)connect" onClick="javascript: wsReconnect();" style="margin-left: 20px; width: 100px;"><input type="button" value="Close socket" onClick="javascript: wsClose();" style="margin-left: 10px; width: 100px;"></p>
+	<table style="border: none;">
+		<tr>
+			<td><div id="geophone-graph" style="width: 600px; height: 400px;"></div></td>
+			<td><fieldset><legend>Vertical zoom</legend>
+				<table style="border: none;">
+					<tr>
+					<td align="right" style="white-space: nowrap;">Max y:</td>
+					<td align="left"><input type="number" id="zoomYmax" min="1" max="4095" value="4095" style="width: 50px;"></td>
+					</tr><tr>
+					<td align="right" style="white-space: nowrap;">Min y:</td>
+					<td align="left"><input type="number" id="zoomYmin" min="0" max="4094" value="0" style="width: 50px;"></td>
+					</tr>
+				</table>
+				</fieldset>
+				<br>
+				<fieldset><legend>Horizontal zoom</legend>
+				Show last <input type="number" id="zoomX" min="1" max="15" step="0.5" value="5" style="width: 35px; margin-left: 4px;"> s
+				</fieldset>
+			</td>
+		</tr>
+	</table>
+	<p><input type="button" value="Clear data" style="width: 100px;" onClick="javascript: dataClear();"><input type="button" value="Save data" style="margin-left: 10px; width: 100px;" onClick="javascript: dataDownload();"></p>
+</body>
+</html>
