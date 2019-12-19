@@ -14,10 +14,8 @@
 #define RADIO_CS_PIN    10
 #define RADIO_RST_PIN   9
 #define RADIO_IRQ_PIN   2
-#define ADCPIN          A2
+#define ADCPIN          A1
 #define DW_MICROSECONDS 1
-
-
 
 // message flow state
 volatile byte expectedMsgId = POLL;

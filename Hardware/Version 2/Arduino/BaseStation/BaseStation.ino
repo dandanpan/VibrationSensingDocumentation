@@ -9,12 +9,12 @@
 #define DEVICE_ID         1
 #define DEBUG             1
 
-#define RESET_PIN           9
-#define CS_PIN              10
-#define IRQ_PIN             2
+#define RESET_PIN         9
+#define CS_PIN            10
+#define IRQ_PIN           2
 
 // message flow state
-//volatile byte expectedMsgId = SYNC_ACK;
+// volatile byte expectedMsgId = SYNC_ACK;
 volatile byte expectedMsgId = POLL_ACK;
 volatile byte currentStatus = BS_IDLE;
 // message sent/received state
