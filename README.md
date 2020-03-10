@@ -17,3 +17,7 @@ The modified DW1000 library is DW1000-20191218T032326Z-001.zip, the file Footste
 - RADIO_RESET_COUNT
 
 ## Localization through Vibration Sensing
+
+## Other plotting related resources:
+http://alex.bikfalvi.com/research/advanced_matlab_boxplot/
+
