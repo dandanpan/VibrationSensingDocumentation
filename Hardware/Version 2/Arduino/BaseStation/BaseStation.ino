@@ -211,7 +211,7 @@ void loop() {
                 SerialUSB.write(separator, SEPARATOR_SIZE);
                 SerialUSB.write(TAG_DIED);//
                 SerialUSB.write(msgToTag);
-//                SerialUSB.print("Tag died:");SerialUSB.println(msgToTag);
+                SerialUSB.print("Tag died:");SerialUSB.println(msgToTag);
                 // mark the tag and continue
                 tagError[msgToTag-TAG_ID_OFFSET-1] += 1;
                 msgToTag += 1;

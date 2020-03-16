@@ -6,7 +6,7 @@ function [ stepEventsIdx, stepEventsVal, ...
     
     windowSize = 1024;
     WIN1=windowSize/2;
-    WIN2=windowSize*3;
+    WIN2=windowSize*2;
     offSet = windowSize/2;
     eventSize = WIN1+WIN2;
     

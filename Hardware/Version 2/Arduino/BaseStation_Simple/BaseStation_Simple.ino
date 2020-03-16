@@ -10,14 +10,14 @@
 #define DEBUG             1
 
 // pin for Zero
-//#define RESET_PIN           9
-//#define CS_PIN              10
-//#define IRQ_PIN             2
+#define RESET_PIN           9
+#define CS_PIN              10
+#define IRQ_PIN             2
 
 // pin for Due
-#define CS_PIN              52
-#define RESET_PIN           5
-#define IRQ_PIN             3
+//#define CS_PIN              52
+//#define RESET_PIN           5
+//#define IRQ_PIN             3
 
 // message flow state
 // message sent/received state
@@ -57,7 +57,7 @@ void handleReceived() {
 }
 
 void transmitSync() {
-  //    SerialUSB.println("DEBUG: BROADCAST timestamp");
+  SerialUSB.println("DEBUG: BROADCAST timestamp");
   DW1000.newTransmit();
   DW1000.setDefaults();
   data[0] = SYNC_REQ;
@@ -102,7 +102,6 @@ void setup() {
   // initialize the driver
   DW1000.begin(IRQ_PIN, RESET_PIN);
   DW1000.select(CS_PIN);
-
 
   SerialUSB.println("DW1000 initialized ...");
   // general configuration
@@ -153,6 +152,5 @@ void loop() {
       noteActivity();
     }
   }
+  delay(10000);
 }
-
-

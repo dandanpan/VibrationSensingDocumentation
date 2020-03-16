@@ -423,6 +423,7 @@ void loop() {
                   if(msgId == RESET_NETWORK) {
                       resetInactive();
                   } else if (msgId == SYNC_REQ) {
+                      SerialUSB.println("received SYNC_REQ");
                       timestamp = 0; 
                       timestamp |= data[6];
                       timestamp <<= 8;
@@ -442,8 +443,8 @@ void loop() {
     /*
     * SERIAL OUTPUT PART
     */
-    if (writeLoc) {
-      writeLoc = false;
-      printVibration();
-    }
+//    if (writeLoc) {
+//      writeLoc = false;
+//      printVibration();
+//    }
 }
