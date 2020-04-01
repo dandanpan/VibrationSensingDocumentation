@@ -7,10 +7,10 @@ function [ location ] = locationEstFromTDoA( TDoAPairs, sensorLoc, sensorSet, ve
     end
         
     x0 = [0;0]; 
-    for sensorID = sensorSet
-        x0 = x0 + sensorLoc{sensorID}';
-    end
-    x0 = x0./length(sensorSet);
+%     for sensorID = sensorSet
+%         x0 = x0 + sensorLoc{sensorID}';
+%     end
+%     x0 = x0./length(sensorSet);
     options = optimoptions('fsolve', 'Algorithm', 'levenberg-marquardt', 'Display', 'none');
     
     [location, ~, ~] = fsolve(@(x) buildLocEq( TDoAPairs, sensorLoc, x, velocity ),x0,options);
