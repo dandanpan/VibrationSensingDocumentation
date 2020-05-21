@@ -1,4 +1,4 @@
-# VibrationSensingDocumentation
+
 
 ## Hardware Version 2 Installation
 The setup guide for Arduino Zero can be found here:
@@ -16,8 +16,5 @@ The modified DW1000 library is DW1000-20191218T032326Z-001.zip, the file Footste
 - TAG_ID_OFFSET 
 - RADIO_RESET_COUNT
 
-## Localization through Vibration Sensing
-
-## Other plotting related resources:
-http://alex.bikfalvi.com/research/advanced_matlab_boxplot/
-
+Decawave 1000: 
+http://www.marketwired.com/press-release/decawave-launches-dwm1000-module-for-precise-indoor-location-and-communication-1925616.htm
