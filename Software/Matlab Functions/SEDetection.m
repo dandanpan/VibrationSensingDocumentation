@@ -51,7 +51,6 @@ function [ stepEventsSig, stepEventsIdx, stepEventsVal, ...
                 [localPeakValue, localPeak] = max(abs(stepRange));
                 stepPeak = stepStart + localPeak - 1;
 
-
                 % extract clear signal
                 stepStartIdx = max(stepPeak - WIN1, stepStart);
                 stepStopIdx = stepStartIdx + eventSize - 1;
