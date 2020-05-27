@@ -105,7 +105,10 @@ void readXBee(){
           commandId = rx16.getData(0);
           commandSeq = rx16.getData(1);
           payload[2] = commandSeq;
-          if (commandId == 115){
+
+          // If received 's', start a new file, 
+          // If received 'e', end current file
+          if (commandId == 115){ 
             SerialUSB.println("begin");
             if (!working){
               SDGenerateNewFile(commandSeq);
