@@ -8,6 +8,7 @@ The code for vibration based pedestrian identification and human-structure inter
 
 ## Other related library
 SVM Light
+
 Arduino
   - DW1000
   - Zigbee
