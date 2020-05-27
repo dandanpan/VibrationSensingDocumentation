@@ -60,3 +60,81 @@ The modified DW1000 library is DW1000-20191218T032326Z-001.zip, the file Footste
 
 Decawave 1000: 
 http://www.marketwired.com/press-release/decawave-launches-dwm1000-module-for-precise-indoor-location-and-communication-1925616.htm
+
+
+### Data Collection Setup
+
+#### Mac
+The Mac is connected to the Base Station, run readcom_base.py under the designated folder.
+
+#### Base Station 
+Change the Tag and Anchor number in Footstep.h file in the library, then flash the Base Station before run readcom_base.py.
+
+Put the updated library into the /Arduino folder.
+
+#### Anchor
+Place the anchors on the floor and power them.
+
+#### Tag 
+Place the tag on people’s leg and power with battery through USB
+
+
+### Data Access
+#### Base Station
+Connect Base Station to Mac, and run 
+```sh
+python readcom_base.py
+```
+
+#### Anchor
+SSH into the anchor node: 
+```sh
+ssh pi@<ip address>
+```
+```sh
+ssh pi@192.168.0.2 -o UserKnownHostsFile=null
+```
+
+Sometimes use:
+```sh
+ssh-keygen -R 192.168.0.2
+```
+
+Find the folder location: 
+```sh
+cd Footstep/config/scripts/pyanchor-read/
+```
+
+Checkout collected files: 
+```sh
+find . -name "*.txt" -type f 
+```
+
+Disconnect SSH; return to local machine destination folder
+
+Copy from pi to local machine: 
+```sh
+scp -r pi@192.168.0.2:/home/pi/Footstep/config/scripts/pyanchor-read ./
+```
+
+Delete collected files after copy out: 
+```sh
+find . -name "20xx-*.txt" -type f -delete
+```
+
+To access the data through Ethernet port, the ethernet setting on the Mac needs to be set to 192.168.0.1 to allow correct LAN connection.
+
+
+### Data Pre-Processing
+Copy all the txt files from each node into the corresponding folder.
+The folder is organized as 
+
+Anchor: /Dataset/AnchorN/copyFromPi/Footstep/
+
+Base: /Dataset/Base/copyFromMac/
+
+Run dataExtraction.m under corresponding folder to align the data. Define number of Tag and Anchor in the file.
+
+
+
+
