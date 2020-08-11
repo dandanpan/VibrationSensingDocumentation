@@ -1,4 +1,9 @@
-Function Description:
+## Publications
+Shi, Laixi, Mostafa Mirshekari, Jonathon Fagert, Yuejie Chi, Hae Young Noh, Pei Zhang, and Shijia Pan. "Device-free Multiple People Localization through Floor Vibration." In Proceedings of the 1st ACM International Workshop on Device-Free Human Sensing, pp. 57-61. 2019.
+
+Shi, Laixi, Yue Zhang, Shijia Pan, and Yuejie Chi. "Data Quality-Informed Multiple Occupant Localization using Floor Vibration Sensing." In Proceedings of the 21st International Workshop on Mobile Computing Systems and Applications, pp. 98-98. 2020.
+
+## Function Description:
 
 Main function:
 1.localize_3perosn_porterhall.m : the main file dealing with the 3 person experiments in Porter Hall
