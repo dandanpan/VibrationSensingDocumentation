@@ -2,8 +2,13 @@ function [ stepEventsSig, stepEventsIdx, stepEventsVal, ...
             stepStartIdxArray, stepStopIdxArray, ... 
             windowEnergyArray, noiseMu, noiseSigma, noiseRange ] = SEDetection( rawSig, noiseSig )
 
-    % this function extract the footsteps from a signal segment
+    % Author: Shijia Pan
+    % This function extract the footstep-induced signals 
+    % Inputs:
+    %     rawSig: entire investigated signal segments
+    %     noiseSig: sample ambient noise signal segments without any excitation
     
+    % fixed system parameters
     windowSize = 1024*2.5;
     WIN1=windowSize/2;
     WIN2=windowSize;
