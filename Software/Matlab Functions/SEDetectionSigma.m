@@ -2,13 +2,17 @@ function [ stepEventsIdx, stepEventsVal, ...
             stepStartIdxArray, stepStopIdxArray, ... 
             windowEnergyArray, noiseMu, noiseSigma, noiseRange ] = SEDetectionSigma( rawSig, noiseSig, sigmaSize )
 
-    % this function extract the footsteps from a signal segment
+    % This function extract the footstep-induced signals 
+    % Inputs:
+    %     rawSig: entire investigated signal segments
+    %     noiseSig: sample ambient noise signal segments without any excitation
+    %     sigmaSize: Gaussian noise model based parameter, impacts false positive/negative rate
     
-    windowSize = 1024;
-    WIN1=windowSize/2;
-    WIN2=windowSize*2;
-    offSet = windowSize/2;
-    eventSize = WIN1+WIN2;
+    windowSize = 1024;     % can be adjusted based on the sampling rate
+    WIN1=windowSize/2;     % pre-defined signal onset size
+    WIN2=windowSize*2;     % pre-defined signal tail size
+    offSet = windowSize/2; % sliding window step size
+    eventSize = WIN1+WIN2; % total event size
     
     states = 0;
     windowEnergyArray = [];
@@ -21,6 +25,7 @@ function [ stepEventsIdx, stepEventsVal, ...
     stepStartIdxArray = [];
     stepStopIdxArray = [];
     
+    % noiseSig modeling
     idx = 1;
     while idx < length(noiseSig) - max(windowSize, eventSize) - 10
          windowData = noiseSig(idx:idx+windowSize-1);
@@ -30,17 +35,17 @@ function [ stepEventsIdx, stepEventsVal, ...
     end
     [noiseMu,noiseSigma] = normfit(windowDataEnergyArray);
     
+    % rawSig detecting
     idx = 1;
     windowEnergyArray = [];
     signal = rawSig;
     
     while idx < length(signal) - 2 * max(windowSize, eventSize)
-        % if one sensor detected, we count all sensor detected it
         windowData = signal(idx:idx+windowSize-1);
         windowDataEnergy = sum(windowData.*windowData);
         windowEnergyArray = [windowEnergyArray; windowDataEnergy idx];
         
-        % gaussian fit
+        % gaussian noise model updates
         if abs(windowDataEnergy - noiseMu) < noiseSigma * sigmaSize
             % the window is noise
             if states == 1 
@@ -74,13 +79,13 @@ function [ stepEventsIdx, stepEventsVal, ...
         
         idx = idx + offSet;
     end
+    
     % unfinished Step
     if states == 1
         stepEnd = length(signal);
         stepRange = rawSig(stepStart:stepEnd);
         [localPeakValue, localPeak] = max(abs(stepRange));
         stepPeak = stepStart + localPeak - 1;
-
 
         % extract clear signal
         stepStartIdx = max(stepPeak - WIN1, stepStart);
