@@ -5,9 +5,9 @@ There are 4 versions of hardware, Version 2 and 3 are currently in use.
 
 ## Software
 The code for vibration based pedestrian identification and human-structure interaction localization.
-### Matlab Functions
+#### Matlab Functions
 Including the modulized functions we used for footstep-induced vibration signal detection and analysis
-### FootprintID
+#### FootprintID
 The code for our iterative learning using physical constraints for footstep-induced vibration based identification
 
 
