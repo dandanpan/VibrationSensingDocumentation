@@ -2,4 +2,4 @@ Pan, Shijia, Ceferino Gabriel Ramirez, Mostafa Mirshekari, Jonathon Fagert, Albe
 
 Pan, Shijia, Mostafa Mirshekari, Jonathon Fagert, Ceferino Gabriel Ramirez, Albert Jin Chung, Chih Chi Hu, John Paul Shen, Pei Zhang, and Hae Young Noh. "Characterizing human activity induced impulse and slip-pulse excitations through structural vibration." Journal of Sound and Vibration 414 (2018): 61-80.
 
-This part of the code is implemented by Ceferino Gabriel Ramirez
+This part of the code is implemented by Ceferino Gabriel Ramirez, the data collection is conducted with a LeCroy oscilloscope.
