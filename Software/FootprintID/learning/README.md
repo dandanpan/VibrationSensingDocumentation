@@ -4,7 +4,9 @@ Yu, Tong, Shijia Pan, Susu Xu, Xinlei Chen, Mostafa Mirshekari, Jonathon Fagert,
 
 Pan, Shijia, Tong Yu, Mostafa Mirshekari, Jonathon Fagert, Amelie Bonde, Ole J. Mengshoel, Hae Young Noh, and Pei Zhang. "Footprintid: Indoor pedestrian identification through ambient structural vibration sensing." Proceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technologies 1, no. 3 (2017): 1-31.
 
-Dependencies: The implementation uses 
+Dependencies:  
 1) LIBSVM, https://www.csie.ntu.edu.tw/~cjlin/libsvm/
 2) SVMlight, http://svmlight.joachims.org/
 2) SVMlight's MATLAB interface by Anton Schwaighofer, https://github.com/viggin/domain-adaptation-toolbox/tree/master/svml-master
+
+The current implementation is tested on Mac OS. 
