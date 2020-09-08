@@ -4,7 +4,9 @@ Pan, Shijia, Tong Yu, Mostafa Mirshekari, Jonathon Fagert, Amelie Bonde, Ole J. 
 
 Yu, Tong, Shijia Pan, Susu Xu, Xinlei Chen, Mostafa Mirshekari, Jonathon Fagert, Hae Young Noh, Pei Zhang, and Ole J. Mengshoel. "Ilpc: Iterative learning using physical constraints in real-world sensing data." In Workshops at the Thirty-Second AAAI Conference on Artificial Intelligence. 2018.
 
-The current implementation is tested on Mac OS. Dependencies:  
+The current implementation is tested on Mac OS. 
+
+Dependencies:  
 1) LIBSVM, https://www.csie.ntu.edu.tw/~cjlin/libsvm/
 
 When necessary, remember to get executables by:
