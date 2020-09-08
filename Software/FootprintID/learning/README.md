@@ -7,20 +7,17 @@ Pan, Shijia, Tong Yu, Mostafa Mirshekari, Jonathon Fagert, Amelie Bonde, Ole J. 
 Dependencies:  
 1) LIBSVM, https://www.csie.ntu.edu.tw/~cjlin/libsvm/
 
-When necessary, remember to get executables by
+When necessary, remember to get executables by:
 
 cd libsvm-3.22/matlab/
-
 make
 
 2) SVMlight, http://svmlight.joachims.org/
-2) SVMlight's MATLAB interface by Anton Schwaighofer, https://github.com/viggin/domain-adaptation-toolbox/tree/master/svml-master
+3) SVMlight's MATLAB interface by Anton Schwaighofer, https://github.com/viggin/domain-adaptation-toolbox/tree/master/svml-master
 
-The current implementation is tested on Mac OS. When necessary, remember to change the mode for the executables by
+The current implementation is tested on Mac OS. When necessary, remember to change the mode for the executables by:
 
 svml-master
-
 chmod +x svm_learn
-
 chmod +x svm_classify
 
