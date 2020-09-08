@@ -17,7 +17,7 @@ When necessary, remember to get executables by:
 2) SVMlight, http://svmlight.joachims.org/
 3) SVMlight's MATLAB interface by Anton Schwaighofer, https://github.com/viggin/domain-adaptation-toolbox/tree/master/svml-master
 
-When necessary, remember to change the mode for the executables by:
+When necessary, remember to change the mode of the executables by:
 
     cd svml-master
     chmod +x svm_learn
