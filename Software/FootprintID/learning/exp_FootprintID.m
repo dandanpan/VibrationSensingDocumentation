@@ -381,7 +381,7 @@ for i = 1:10
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% evaluated by svmlight, no semi supervised learning, should generate the
+% evaluated by svmlight, no semi-supervised learning, should generate the
 % same results as libsvm does
 
 options = svmlopt('ExecPath', 'svml-master/.');
@@ -412,7 +412,7 @@ size(find(y_te == pred_multi),1)/size(y_te,1);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% evaluated by svmlight, with semi supervised learning
+% evaluated by svmlight, with semi-supervised learning
 
 
 pred_table = [];
