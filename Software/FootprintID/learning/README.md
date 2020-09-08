@@ -9,4 +9,7 @@ Dependencies:
 2) SVMlight, http://svmlight.joachims.org/
 2) SVMlight's MATLAB interface by Anton Schwaighofer, https://github.com/viggin/domain-adaptation-toolbox/tree/master/svml-master
 
-The current implementation is tested on Mac OS. 
+The current implementation is tested on Mac OS. When necessary, remember to change the mode for the executables:
+
+chmod +x svm_learn
+chmod +x svm_classify
