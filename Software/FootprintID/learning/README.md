@@ -17,7 +17,7 @@ When necessary, remember to get executables by:
 
 The current implementation is tested on Mac OS. When necessary, remember to change the mode for the executables by:
 
-    svml-master
+    cd svml-master
     chmod +x svm_learn
     chmod +x svm_classify
 
