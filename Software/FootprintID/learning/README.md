@@ -9,7 +9,7 @@ Dependencies:
 
 When necessary, remember to get executables by:
 
-cd libsvm-3.22/matlab/
+cd libsvm-3.22/matlab/ \n
 make
 
 2) SVMlight, http://svmlight.joachims.org/
