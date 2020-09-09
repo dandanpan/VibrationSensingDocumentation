@@ -2,6 +2,7 @@ function [ stepEventsIdx, stepEventsVal, ...
             stepStartIdxArray, stepStopIdxArray, ... 
             windowEnergyArray, noiseMu, noiseSigma, noiseRange ] = SEDetectionSigma( rawSig, noiseSig, sigmaSize )
 
+    % Author: Shijia Pan
     % This function extract the footstep-induced signals 
     % Inputs:
     %     rawSig: entire investigated signal segments
