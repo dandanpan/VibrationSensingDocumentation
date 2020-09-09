@@ -1,7 +1,7 @@
 # VibrationSensingDocumentation
 
 ## Hardware 
-There are 4 versions of hardware, Version 2 and 3 are currently in use. 
+There are 3 versions of Arduino based hardware, Version 2 and 3 are currently in use. 
 
 ## Software
 The code for vibration based pedestrian identification and human-structure interaction localization.
